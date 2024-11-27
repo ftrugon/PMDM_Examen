@@ -10,17 +10,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.pmdm_examen.Navegation.AppScreen
+import com.example.pmdm_examen.Registro
+import kotlinx.serialization.json.Json
 
 
 @Composable
 fun SecondScreen(navController: NavController, contact:String){
+
+
+    val contact = Json.decodeFromString<Registro>(contact)
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(contact)
+        Text(contact.nombre)
+        Text(contact.apellido)
+        Text(contact.dni)
+        Text(contact.mail)
         Button(
             onClick = {navController.popBackStack()}
         ){
