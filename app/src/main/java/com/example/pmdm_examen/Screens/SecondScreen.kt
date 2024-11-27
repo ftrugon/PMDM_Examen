@@ -15,20 +15,20 @@ import kotlinx.serialization.json.Json
 
 
 @Composable
-fun SecondScreen(navController: NavController, contact:String){
+fun SecondScreen(navController: NavController, registro:String){
 
 
-    val contact = Json.decodeFromString<Registro>(contact)
+    val registroDecoded = Json.decodeFromString<Registro>(registro)
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(contact.nombre)
-        Text(contact.apellido)
-        Text(contact.dni)
-        Text(contact.mail)
+        Text(registroDecoded.nombre)
+        Text(registroDecoded.apellido)
+        Text(registroDecoded.dni)
+        Text(registroDecoded.mail)
         Button(
             onClick = {navController.popBackStack()}
         ){

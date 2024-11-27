@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pmdm_examen.Navegation.AppScreen
 import com.example.pmdm_examen.Registro
+import com.example.pmdm_examen.Utils
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
@@ -71,14 +72,17 @@ fun FirstScreen(navController:NavController) {
         Button(
             onClick = {
 
-                val contacto = Registro(nombre, apellido, dni, mail)
+                // creo el registro, lo compruebo y lo combierto a una cadena
+                val newRegistro = Registro(nombre, apellido, dni, mail)
+                Utils.checkRegistro(newRegistro)
 
-                val contactoToString = Json.encodeToString(contacto)
+                //La clase Json es una dependencia
+                val newRegistroString = Json.encodeToString(newRegistro)
 
-                navController.navigate(route = AppScreen.SecondScreen.route + "/$contactoToString")
+                navController.navigate(route = AppScreen.SecondScreen.route + "/$newRegistroString")
             }
         ){
-            Text("Cambiar a pantalla 2")
+            Text("Registrarte")
         }
     }
 }

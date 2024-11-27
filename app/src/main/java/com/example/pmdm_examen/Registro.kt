@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
+//Los @ de esta clase son para que la dependecia de Json pueda convertirlo a cadena de texto
 
 @Serializable
 @Parcelize

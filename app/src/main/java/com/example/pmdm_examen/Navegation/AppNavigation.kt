@@ -18,6 +18,8 @@ fun AppNavigation(modifier: Modifier){
 
     val navControlador = rememberNavController()
 
+    //Veia mas comodo usar un navController
+
     NavHost(
         navController = navControlador,
         startDestination = AppScreen.FirstScreen.route)
@@ -27,7 +29,7 @@ fun AppNavigation(modifier: Modifier){
         }
 
         composable(AppScreen.SecondScreen.route + "/{nombre}",
-            arguments = listOf(navArgument(name = "nombre"){type = NavType.StringType})
+            arguments = listOf(navArgument(name = "nombre"){type = NavType.StringType}) // <- Esto es asi porque voy a usar Json para codificar una clase a string
         ){
             val nombre = it.arguments?.getString("nombre")?: ""
 
