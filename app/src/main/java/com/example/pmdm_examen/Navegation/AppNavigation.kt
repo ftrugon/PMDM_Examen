@@ -28,10 +28,10 @@ fun AppNavigation(modifier: Modifier){
             FirstScreen(navControlador)
         }
 
-        composable(AppScreen.SecondScreen.route + "/{nombre}",
-            arguments = listOf(navArgument(name = "nombre"){type = NavType.StringType}) // <- Esto es asi porque voy a usar Json para codificar una clase a string
+        composable(AppScreen.SecondScreen.route + "/{registro}",
+            arguments = listOf(navArgument(name = "registro"){type = NavType.StringType}) // <- Esto es asi porque voy a usar Json para codificar una clase a string
         ){
-            val nombre = it.arguments?.getString("nombre")?: ""
+            val nombre = it.arguments?.getString("registro")?: ""
 
             SecondScreen(navControlador,nombre)
         }

@@ -2,14 +2,21 @@ package com.example.pmdm_examen.Screens
 
 import android.health.connect.datatypes.units.Length
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,8 +29,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.pmdm_examen.Navegation.AppScreen
 import com.example.pmdm_examen.Registro
@@ -36,10 +48,14 @@ import kotlinx.serialization.json.JsonNull
 @Composable
 fun FirstScreen(navController:NavController) {
 
+
+    var showError by remember { mutableStateOf(false) }
+    val fails by remember { mutableStateOf(mutableListOf<String>()) }
+
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -66,26 +82,81 @@ fun FirstScreen(navController:NavController) {
             mail = it
         }
 
+        var canRegister by remember { mutableStateOf(false) }
 
 
 
         Button(
             onClick = {
-
-                // creo el registro, lo compruebo y lo combierto a una cadena
+                // creo el registro
                 val newRegistro = Registro(nombre, apellido, dni, mail)
-                Utils.checkRegistro(newRegistro)
+                // compruebo el registro
 
-                //La clase Json es una dependencia
-                val newRegistroString = Json.encodeToString(newRegistro)
+                val checkedPair = Utils.checkRegistro(newRegistro)
 
-                navController.navigate(route = AppScreen.SecondScreen.route + "/$newRegistroString")
+                canRegister = checkedPair.first
+                fails.addAll(checkedPair.second)
+
+                if (canRegister){
+                    // combierto el registro en una cadena
+                    //La clase Json es una dependencia
+                    val newRegistroString = Json.encodeToString(newRegistro)
+
+                    navController.navigate(route = AppScreen.SecondScreen.route + "/$newRegistroString")
+                }else{
+
+                    showError = true
+
+                }
             }
         ){
             Text("Registrarte")
         }
     }
+    if(showError){
+        DialogIcon(fails) {
+            showError = false
+            fails.clear()
+        }
+    }
+
+
 }
+
+
+
+
+// funciona para mostrar los fallos
+@Composable
+fun DialogIcon(fails:MutableList<String>, onDismiss: () -> Unit){
+
+    Dialog(onDismiss) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(0.dp),
+        ) {
+
+            Text("Los siguientes campos dan fallo: ")
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+                itemsIndexed(fails){ index, campoFallante->
+                    Box(modifier = Modifier.fillMaxWidth()){
+                        Text("${index +1}: $campoFallante")
+                    }
+                }
+            }
+
+            Text("Comprueba que esten bien escritos o no sean una cadena vacia ")
+
+        }
+
+    }
+}
+
 
 
 @Composable

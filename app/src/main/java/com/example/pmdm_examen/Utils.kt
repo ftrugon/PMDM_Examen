@@ -6,7 +6,7 @@ object Utils {
 
 
     // para chechear si el registro que vamos a insertar es valido
-    fun checkRegistro(toCheckRegistro: Registro):Boolean{
+    fun checkRegistro(toCheckRegistro: Registro):Pair<Boolean,MutableList<String>>{
 
         // he dehado las variables asi para debugear
         val checkedName = checkName(toCheckRegistro.nombre)
@@ -14,9 +14,16 @@ object Utils {
         val checkedDni = checkDni(toCheckRegistro.dni)
         val checkedMail = checkMail(toCheckRegistro.mail)
 
+        val fails = mutableListOf<String>()
+        if (!checkedName) fails.add("Nombre")
+        if (!checkedApel) fails.add("Apellidos")
+        if (!checkedDni) fails.add("Dni")
+        if (!checkedMail) fails.add("Mail")
+
+
         if (checkedName && checkedApel && checkedDni && checkedMail){
-            return true
-        }else return false
+            return true to fails
+        }else return false to fails
     }
 
 
