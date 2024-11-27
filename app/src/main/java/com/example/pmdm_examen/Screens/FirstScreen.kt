@@ -48,7 +48,7 @@ import kotlinx.serialization.json.JsonNull
 @Composable
 fun FirstScreen(navController:NavController) {
 
-
+    // variables para mostrar los errores en la pestaña emergente
     var showError by remember { mutableStateOf(false) }
     val fails by remember { mutableStateOf(mutableListOf<String>()) }
 
@@ -113,6 +113,8 @@ fun FirstScreen(navController:NavController) {
             Text("Registrarte")
         }
     }
+
+    // comprueba si tiene que mostrar la pestaña emergente
     if(showError){
         DialogIcon(fails) {
             showError = false
@@ -159,6 +161,7 @@ fun DialogIcon(fails:MutableList<String>, onDismiss: () -> Unit){
 
 
 
+//funcion de los campos de texto
 @Composable
 fun CampoTexto(nombreCampo:String,valorCampo:String,maxLength: Int,onValueChange:(String)->Unit){
 
